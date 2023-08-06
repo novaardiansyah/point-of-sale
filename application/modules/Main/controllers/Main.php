@@ -5,6 +5,6 @@ class Main extends MX_Controller
 {
   public function index()
   {
-    echo 'Main Controller';
+    $this->load->view('main/main');
   }
 }
