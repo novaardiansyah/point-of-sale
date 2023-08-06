@@ -5,11 +5,11 @@ class Auth extends MX_Controller
 {
   public function index()
   {
-    $this->load->view('Auth/auth/login');
+    $this->load->view('auth/auth/login');
   }
 
   public function signup()
   {
-    $this->load->view('Auth/auth/signup');
+    $this->load->view('auth/auth/signup');
   }
 }

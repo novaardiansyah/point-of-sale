@@ -5,6 +5,6 @@ class Main extends MX_Controller
 {
   public function index()
   {
-    view('main/dashboard');
+    view('main/main/dashboard');
   }
 }

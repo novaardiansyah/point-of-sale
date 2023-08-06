@@ -1,4 +1,4 @@
-<?php $this->load->view('Auth/auth/components/header'); ?>
+<?php $this->load->view('auth/auth/components/header'); ?>
   <main class="main-content mt-0">
     <section>
       <div class="page-header min-vh-100">
@@ -48,4 +48,4 @@
       </div>
     </section>
   </main>
-<?php $this->load->view('Auth/auth/components/footer'); ?>
+<?php $this->load->view('auth/auth/components/footer'); ?>

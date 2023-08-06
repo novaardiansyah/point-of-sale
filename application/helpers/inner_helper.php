@@ -23,6 +23,6 @@ if (!function_exists('view'))
   {
     $ci = get_instance();
     $content = $ci->load->view($view, $data, TRUE);
-    $ci->load->view('Main/main/main', ['content' => $content]);
+    $ci->load->view('main/main/main', ['content' => $content]);
   }
 }
