@@ -16,3 +16,13 @@ if (!function_exists('argon_url'))
     return base_url('assets/vendor/argon/' . $path);
   }
 }
+
+if (!function_exists('view'))
+{
+  function view($view, $data = [])
+  {
+    $ci = get_instance();
+    $content = $ci->load->view($view, $data, TRUE);
+    $ci->load->view('Main/main/main', ['content' => $content]);
+  }
+}
