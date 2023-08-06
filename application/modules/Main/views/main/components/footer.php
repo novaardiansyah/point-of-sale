@@ -10,7 +10,7 @@
           <a href="https://novaardiansyah.site" class="font-weight-bold" target="_blank">Nova Ardiansyah</a>
           All Rights Reserved
 
-          <br /> made with <i class="fa fa-heart"></i> by
+          <br /> Soft by
           <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
         </div>
       </div>
