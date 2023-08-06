@@ -1,4 +1,4 @@
-<?php $this->load->view('Auth/auth/components/signup/header'); ?>
+<?php $this->load->view('auth/auth/components/signup/header'); ?>
   <div class="container">
     <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
       <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
@@ -7,7 +7,7 @@
             <h5>Register with</h5>
           </div>
           <div class="row px-xl-5 px-sm-4 px-3">
-            <?php $this->load->view('Auth/auth/components/signup/google-btn'); ?>
+            <?php $this->load->view('auth/auth/components/signup/google-btn'); ?>
 
             <div class="mt-2 position-relative text-center">
               <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
@@ -53,4 +53,4 @@
     </div>
     <!-- /.row -->
   </div>
-<?php $this->load->view('Auth/auth/components/signup/footer'); ?>
+<?php $this->load->view('auth/auth/components/signup/footer'); ?>

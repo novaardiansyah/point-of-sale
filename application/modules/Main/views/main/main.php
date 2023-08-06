@@ -39,13 +39,13 @@
 <body class="g-sidenav-show bg-gray-100">
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   
-  <?php $this->load->view('Main/main/components/sidebar'); ?>
+  <?php $this->load->view('main/main/components/sidebar'); ?>
 
   <main class="main-content position-relative border-radius-lg">
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
       <div class="container-fluid py-1 px-3">
-        <?php $this->load->view('Main/main/components/breadcrumb'); ?>
+        <?php $this->load->view('main/main/components/breadcrumb'); ?>
 
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -159,10 +159,10 @@
     </nav>
     <!-- End Navbar -->
     
-    <?php $this->load->view('Main/main/components/content'); ?>
+    <?php $this->load->view('main/main/components/content'); ?>
     
     <div class="container-fluid py-4">
-      <?php $this->load->view('Main/main/components/footer'); ?>
+      <?php $this->load->view('main/main/components/footer'); ?>
     </div>
   </main>
 

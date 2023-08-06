@@ -36,4 +36,4 @@
       </div>
   </footer>
 
-<?php $this->load->view('Auth/auth/components/footer'); ?>
+<?php $this->load->view('auth/auth/components/footer'); ?>
