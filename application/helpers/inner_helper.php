@@ -26,3 +26,26 @@ if (!function_exists('view'))
     $ci->load->view('main/main/main', ['content' => $content]);
   }
 }
+
+if (!function_exists('form_validate'))
+{
+  function form_validate($rules = [])
+  {
+    $ci       = get_instance();
+    $validate = $ci->form_validation->set_rules($rules);
+		
+		if ($validate->run() == false) {
+			return [
+				'status'  => false,
+				'message' => 'invalid-form',
+				'error'   => $validate->error_array()
+			];
+		}
+
+    return [
+      'status'  => true,
+      'message' => 'Success',
+      'error'   => null
+    ];
+  }
+}
