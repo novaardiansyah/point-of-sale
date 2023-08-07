@@ -1,4 +1,4 @@
-<div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('<?= assets_url('img/zixi-zhou-Ic8B165N1og-unsplash.jpg'); ?>'); background-position: top;">
+<div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('<?= assets_url('img/background-signup.webp'); ?>'); background-position: top;">
   <span class="mask bg-gradient-dark opacity-6"></span>
   <div class="container">
     <div class="row justify-content-center">
