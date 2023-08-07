@@ -16,30 +16,37 @@
             </div>
           </div>
           <div class="card-body">
-            <form role="form">
+            <form role="form" novalidate>
               <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Name" />
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Fullname" value="<?= $_ENV['APP_DEMO_MODE'] ? 'Nova Ardiansyah' : ''; ?>" required />
+                <div class="invalid-feedback fullname"></div>
               </div>
+              <!-- /.mb-3 -->
+
               <div class="mb-3">
-                <input type="email" class="form-control" placeholder="Email" />
-              </div>
-              <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Password" />
+                <input type="email" class="form-control" id="email" name="email" value="<?= $_ENV['APP_DEMO_MODE'] ? 'admin@novaardiansyah.site' : ''; ?>" placeholder="Email" />
+                <div class="invalid-feedback email"></div>
               </div>
 
               <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Confirm Password" />
+                <input type="password" class="form-control" id="password" name="password" value="<?= $_ENV['APP_DEMO_MODE'] ? '123456' : ''; ?>" placeholder="Password" />
+                <div class="invalid-feedback password"></div>
+              </div>
+
+              <div class="mb-3">
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" value="<?= $_ENV['APP_DEMO_MODE'] ? '123456' : ''; ?>" placeholder="Confirm Password" />
+                <div class="invalid-feedback confirm_password"></div>
               </div>
 
               <div class="form-check form-check-info text-start">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                <label class="form-check-label" for="flexCheckDefault">
+                <input class="form-check-input" type="checkbox" value="1" id="check_term_conditions" name="check_term_conditions" />
+                <label class="form-check-label" for="check_term_conditions">
                   I agree the <a href="javascript:void(0)" class="text-dark font-weight-bolder">Terms and Conditions</a>
                 </label>
               </div>
 
               <div class="text-center">
-                <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
+                <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2" onclick="return signup(event)">Sign up</button>
               </div>
               
               <p class="text-sm mt-3 mb-0">Already have an account? <a href="<?= base_url('auth'); ?>" class="text-dark font-weight-bolder">Login</a></p>
