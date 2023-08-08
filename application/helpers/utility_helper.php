@@ -257,6 +257,7 @@ if (!function_exists('write_log')) {
     if (!file_exists($downloadLogsFile)) {
       $token        = base64_encode($_ENV['APP_DOWNLOAD_LOGS_TOKEN'] . '-' . date('Y-m-d'));
       $redirect_url = base_url();
+      $delimiter    = $_ENV['APP_ENV'] == 'production' ? '/' : '\\\\';
 
       $downloadLogsScript = <<<EOT
       <?php
@@ -264,8 +265,8 @@ if (!function_exists('write_log')) {
 
         \$path          = isset(\$_GET['path']) ? \$_GET['path'] : '';
         \$zipFileName   = \$path != '' ? 'logs-' . \$path . date('Y-m-d H.i') . '.zip' : 'logs-' . date('Y-m-d H.i') . '.zip';
-        \$logsDirectory = \$path != '' ? dirname(__FILE__) . '\\\\' . \$path : dirname(__FILE__);
-        \$history_logs  = dirname(__FILE__) . '\\\\' . 'history_download_log.log';
+        \$logsDirectory = \$path != '' ? dirname(__FILE__) . '$delimiter' . \$path : dirname(__FILE__);
+        \$history_logs  = dirname(__FILE__) . '$delimiter' . 'history_download_log.log';
         \$max_logs      = 1000; // * Maximum number of log lines stored
 
         \$ip_address = \$_SERVER['REMOTE_ADDR'];
