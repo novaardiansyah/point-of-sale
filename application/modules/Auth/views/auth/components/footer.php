@@ -21,6 +21,8 @@
     }
   </script>
 
+  <?php $this->load->view('firebase/firebase-google-auth'); ?>
+
   <?php if (isset($script)) : ?>
     <?php foreach ($script as $path) : ?>
       <script src="<?= $path; ?>"></script>
