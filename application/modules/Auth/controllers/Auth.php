@@ -53,4 +53,22 @@ class Auth extends MX_Controller
 
     return $rules;
   }
+
+  public function signInWithGoogleAccount()
+  {
+    $send = [
+      'token'          => post('token'),
+      'email'          => post('email'),
+      'emailVerified'  => post('emailVerified'),
+      'isAnonymous'    => post('isAnonymous'),
+      'displayName'    => post('displayName'),
+      'photoURL'       => post('photoURL'),
+      'phoneNumber'    => post('phoneNumber'),
+      'lastLoginAt'    => post('lastLoginAt'),
+      'lastSignInTime' => post('lastSignInTime')
+    ];
+      
+    $result = $this->Auth->signInWithGoogleAccount($send);
+    json($result);
+  }
 }

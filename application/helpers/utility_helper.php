@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 if (!function_exists('getTimestamp'))
 {
-  function getTimestamp($date = 'now', $format = 'Y-m-d H:i:s', $country = 'ID')
+  function getTimestamp($date = 'now', $format = 'Y-m-d H:i:s', $country = 'US')
   {
     date_default_timezone_set('Asia/Jakarta');
     $timestamp = strtotime($date);
