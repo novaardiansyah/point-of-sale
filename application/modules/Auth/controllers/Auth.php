@@ -91,7 +91,7 @@ class Auth extends MX_Controller
           'fullname' => textCapitalize($data->fullname),
           'username' => textUppercase($data->username),
           'email'    => $data->email,
-          'password' => $send['password'] ?? 'very_secret'
+          'password' => $data->default_password ?? 'very_secret'
         ]
       ], true);
       trace($sendmail, 2);
@@ -129,22 +129,23 @@ class Auth extends MX_Controller
     ];
       
     $result = $this->Auth->signInWithGoogleAccount($send);
-    trace($result, 2);
+    trace($result, 1);
 
     if ($result['status'] == true) {
       $data = (object) $result['data'];
       if (isset($data->isNewUser) && $data->isNewUser) {
         $sendmail = sendcustom_email([
           'emailTo' => $data->email,
-          'type'    => 'welcome_message',
+          'type'    => 'signup_message',
           'data' => [
             'uid'      => $data->uid,
             'fullname' => textCapitalize($data->fullname),
-            'username' => $data->username,
-            'password' => $data->default_password
+            'username' => textUppercase($data->username),
+            'email'    => $data->email,
+            'password' => $data->default_password ?? 'very_secret'
           ]
         ], true);
-        trace($sendmail, 1);
+        trace($sendmail, 2);
       }
     }
 

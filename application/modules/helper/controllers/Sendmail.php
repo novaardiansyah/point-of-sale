@@ -9,22 +9,6 @@ class Sendmail extends MX_Controller
     $this->load->helper('sendmail');
   }
 
-  private function welcome_message()
-  {
-    $sendmail = sendcustom_email([
-      'emailTo' => $_ENV['EMAIL_RECEIVER'],
-      'type'    => 'welcome_message',
-      'data' => [
-        'uid'      => uuid(),
-        'fullname' => 'Nova Ardiansyah',
-        'username' => 'novaardiansyah78',
-        'password' => '123456'
-      ]
-    ], true);
-
-    json($sendmail);
-  }
-
   private function signup_message()
   {
     $sendmail = sendcustom_email([

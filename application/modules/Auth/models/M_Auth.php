@@ -18,19 +18,19 @@ class M_Auth extends CI_Model
 
     if (!empty($user)) return ['status' => false, 'message' => 'Your email is already registered'];
 
-    $param->uid = uuid();
+    $param->uid      = uuid();
     $param->username = $this->generate_username();
 
     $send_data = [
       'uid'               => $param->uid ?? null,
-      'username'          => textLowercase($param->username) ?? null,
+      'username'          => textUppercase($param->username) ?? null,
       'email'             => textLowercase($param->email) ?? null,
       'phone'             => $param->phone ?? null,
       'fullname'          => textLowercase($param->fullname) ?? null,
       'profile_image'     => $param->profile_image ?? null,
       'last_login'        => $now,
-      'is_verified_email' => 0,
-      'password'          => hash_password(textLowercase($param->password)),
+      'is_verified_email' => $param->is_verified_email ?? 0,
+      'password'          => hash_password($param->password),
       'token'             => base64_encode($param->uid . '-' . $param->email . '-' . $now),
       'is_active'         => 1,
       'is_deleted'        => 0
@@ -47,7 +47,9 @@ class M_Auth extends CI_Model
     ], ['uid' => $user->uid, 'id' => $user->id]);
     lasq($this->db->last_query(), 3);
 
-    $user->redirectTo = base_url();
+    $user->redirectTo       = base_url();
+    $user->default_password = $param->password;
+    $user->isNewUser        = true;
     unset($user->id);
 
     return ['status' => true, 'message' => 'Hi ' . $param->fullname . ', thanks for joining us', 'data' => $user];
@@ -109,58 +111,33 @@ class M_Auth extends CI_Model
     $user = $this->db->query("SELECT a.id, a.uid, a.username, a.email, a.phone, a.fullname, a.profile_image, a.last_login, a.is_verified_email, a.token, a.is_active, a.is_deleted, a.created_at, a.created_by FROM users AS a WHERE a.email = ?", [$param->email])->row();
     lasq($this->db->last_query(), 1);
 
-    if (!empty($user)) {
-      // * Login dengan google
-      $this->db->update('users', [
-        'last_login' => $now,
-        'token'      => base64_encode($user->uid . '-' . $user->email . '-' . $now),
-        'updated_at' => $now,
-        'updated_by' => $user->id
-      ], ['uid' => $user->uid, 'id' => $user->id]);
-      lasq($this->db->last_query(), 2);
-
-      $user->redirectTo = base_url();
-      unset($user->id);
-
-      return ['status' => true, 'message' => 'Welcome back ' . $param->displayName, 'data' => $user];
+    if (empty($user)) {
+      // * Register dengan google
+      $param->uid = uuid();
+      $send = [
+        'fullname'          => $param->displayName,
+        'email'             => $param->email,
+        'password'          => textUppercase(substr(uuid(), 0, 6)),
+        'is_verified_email' => 1,
+        'phone'             => $param->phoneNumber,
+        'profile_image'     => $param->photoURL
+      ];
+      $register = $this->register($send);
+      return $register;
     }
     
-    // * Register dengan google
-    $param->uid = uuid();
-    $param->default_password = textUppercase(substr($param->uid, 0, 6));
-
-    $send_data = [
-      'uid'               => $param->uid ?? null,
-      'username'          => explode('@', $param->email)[0] ?? null,
-      'email'             => $param->email ?? null,
-      'phone'             => $param->phoneNumber ?? null,
-      'fullname'          => $param->displayName ?? null,
-      'profile_image'     => $param->photoURL ?? null,
-      'last_login'        => $now,
-      'is_verified_email' => 1,
-      'password'          => hash_password($param->default_password),
-      'token'             => base64_encode($param->uid . '-' . $param->email . '-' . $now),
-      'is_active'         => 1,
-      'is_deleted'        => 0
-    ];
-    $this->db->insert('users', $send_data);
-    lasq($this->db->last_query(), 2);
-
-    $user = $this->db->query("SELECT a.id, a.uid, a.username, a.email, a.phone, a.fullname, a.profile_image, a.last_login, a.is_verified_email, a.token, a.is_active, a.is_deleted, a.created_at, a.created_by FROM users AS a WHERE a.email = ? AND a.uid = ?", [$param->email, $param->uid])->row();
-    lasq($this->db->last_query(), 3);
-
+    // * Login dengan google
     $this->db->update('users', [
-      'created_at' => $now,
-      'created_by' => $user->id
+      'last_login' => $now,
+      'token'      => base64_encode($user->uid . '-' . $user->email . '-' . $now),
+      'updated_at' => $now,
+      'updated_by' => $user->id
     ], ['uid' => $user->uid, 'id' => $user->id]);
     lasq($this->db->last_query(), 2);
 
-    $user->redirectTo       = base_url();
-    $user->isNewUser        = true;
-    $user->default_password = $param->default_password;
-
+    $user->redirectTo = base_url();
     unset($user->id);
 
-    return ['status' => true, 'message' => 'Hi ' . $param->displayName . ', thanks for joining us', 'data' => $user];
+    return ['status' => true, 'message' => 'Welcome back ' . $param->displayName, 'data' => $user];
   }
 }
