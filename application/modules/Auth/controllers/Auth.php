@@ -38,8 +38,8 @@ class Auth extends MX_Controller
 
     $result = $this->Auth->signin($send);
 
-    json($result);
     trace($result, 2);
+    json($result);
   }
 
   private function _signin()

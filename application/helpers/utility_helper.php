@@ -237,12 +237,7 @@ if (!function_exists('unset_session'))
 }
 
 if (!function_exists('write_log')) {
-  /**
-   * ! Dependent on :
-   * *   > $_ENV['APP_DOWNLOAD_LOGS_TOKEN']
-   */
-
-  function write_log($prefix = '', $data = [], $newline = false, $auto_encode = true, $path = '')
+  function write_log($prefix = '', $data = [], $newline = false, $path = '')
   {
     date_default_timezone_set('Asia/Jakarta');
     
@@ -250,139 +245,43 @@ if (!function_exists('write_log')) {
     $timeExpired = 3;          // * 3 days
     $maxLogs     = 1000 * 20;  // * Maximum number of log lines stored
 
-    if ($auto_encode) {
-      if (is_array($data) || is_object($data)) $data = json_encode($data);
-    }
+    if (is_array($data) || is_object($data)) $data = json_encode($data);
 
     if ($path == '') $path = 'default';
     if ($prefix != '') $prefix = $prefix . ' : ';
 
     $root = $env == 'front' ? dirname(APPPATH) : dirname(FCPATH);
     $root = $root . '/logs/';
-    $downloadLogsFile = $root . 'download_logs.php';
     
     if (!is_dir($root)) mkdir($root, 0755, true);
-     
-    if (!file_exists($downloadLogsFile)) {
-      $token        = base64_encode($_ENV['APP_DOWNLOAD_LOGS_TOKEN'] . '-' . date('Y-m-d'));
-      $redirect_url = base_url();
-      $delimiter    = $_ENV['APP_ENV'] == 'production' ? '/' : '\\\\';
-
-      $downloadLogsScript = <<<EOT
-      <?php
-        date_default_timezone_set('Asia/Jakarta');
-
-        \$path          = isset(\$_GET['path']) ? \$_GET['path'] : '';
-        \$zipFileName   = \$path != '' ? 'logs-' . \$path . date('Y-m-d H.i') . '.zip' : 'logs-' . date('Y-m-d H.i') . '.zip';
-        \$logsDirectory = \$path != '' ? dirname(__FILE__) . '$delimiter' . \$path : dirname(__FILE__);
-        \$history_logs  = dirname(__FILE__) . '$delimiter' . 'history_download_log.log';
-        \$max_logs      = 1000; // * Maximum number of log lines stored
-
-        \$ip_address = \$_SERVER['REMOTE_ADDR'];
-        \$user_agent = \$_SERVER['HTTP_USER_AGENT'];
-
-        if (file_exists(\$history_logs) && count(file(\$history_logs)) >= \$max_logs) unlink(\$history_logs);
-
-        if (isset(\$_GET['token']) && \$_GET['token'] === '$token') {
-          file_put_contents(\$history_logs, date('Y-m-d H:i:s') . ' -- Download Success Request From : {ip_address: ' . \$ip_address . ', user_agent: ' . \$user_agent . ', zipFileName: ' . \$zipFileName . '}' . PHP_EOL, FILE_APPEND);
-
-          \$zip = new ZipArchive();
-          if (\$zip->open(\$zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
-            \$files = new RecursiveIteratorIterator(
-              new RecursiveDirectoryIterator(\$logsDirectory),
-              RecursiveIteratorIterator::LEAVES_ONLY
-            );
-
-            foreach (\$files as \$name => \$file) {
-              if (!\$file->isDir() && \$file->getFilename() !== 'download_logs.php' && \$file->getFilename() !== '.htaccess') {
-                \$filePath = \$file->getRealPath();
-                \$relativePath = substr(\$filePath, strlen(\$logsDirectory) + 1);
-                \$zip->addFile(\$filePath, \$relativePath);
-              }
-            }
-
-            \$zip->close();
-
-            header('Content-Type: application/zip');
-            header('Content-Disposition: attachment; filename="' . \$zipFileName . '"');
-            header('Content-Length: ' . filesize(\$zipFileName));
-            readfile(\$zipFileName);
-            unlink(\$zipFileName);
-            exit;
-          }
-        }
-
-        file_put_contents(\$history_logs, date('Y-m-d H:i:s') . ' -- Download Failed Request From : {ip_address: ' . \$ip_address . ', user_agent: ' . \$user_agent . ', zipFileName: ' . \$zipFileName . '}' . PHP_EOL, FILE_APPEND);
-
-        header('Location: ' . '$redirect_url'); exit;
-      EOT;
-  
-      $downloadLogsFile = $root . 'download_logs.php';
-      file_put_contents($downloadLogsFile, $downloadLogsScript);
-    }
-
-    $htaccess_content = "# Turn off access to all files inside the logs directory\nDeny from all\n\n# Allow special access to scripts download_logs.php\n<Files \"download_logs.php\">\n    Allow from all\n    Satisfy any\n</Files>";
-    file_put_contents($root . '.htaccess', $htaccess_content);
+    file_put_contents($root . '.htaccess', "Deny from all");
     
     $log_dir = $root . $path . '/';
     if (!is_dir($log_dir)) mkdir($log_dir, 0755, true);
+    file_put_contents($log_dir . '.htaccess', "Deny from all");
     
-    $temp_folder = $root . $path . '/temp/';
-    if (!is_dir($temp_folder)) mkdir($temp_folder, 0755, true);
-
     $log_file = $log_dir . date('Y-m-d') . '.log';
 
-    // * If the log file is more than $maxLogs lines, then the log file will be archived
-    if (file_exists($log_file) && count(file($log_file)) >= $maxLogs) {
-      $increment     = 1;
-      $max_increment = 3;
-      $new_log_file  = $temp_folder . date('Y-m-d') . '-' . $increment . '.log';
-      
-      while (file_exists($new_log_file)) {
-        if ($increment >= $max_increment) {
-          for ($i = 1; $i <= $max_increment; $i++) {
-            $old_log_file = $temp_folder . date('Y-m-d') . '-' . $i . '.log';
-            if (file_exists($old_log_file)) unlink($old_log_file);
-          }
-
-          $increment = 1;
-        }
-
-        $new_log_file = $temp_folder . date('Y-m-d') . '-' . $increment . '.log';
-        $increment++;
-      }
-
-      rename($log_file, $new_log_file);
-    }
+    // * If the log file is more than $maxLogs lines, then the log file will be cleared
+    if (file_exists($log_file) && count(file($log_file)) >= $maxLogs) file_put_contents($log_file, '');
 
     $dataWithTimestamp = date('Y-m-d H:i:s') . ' -- ' . $prefix . $data;
 
-    if ($newline) {
-      file_put_contents($log_file, $dataWithTimestamp . PHP_EOL . PHP_EOL, FILE_APPEND);
-    } else {
-      file_put_contents($log_file, $dataWithTimestamp . PHP_EOL, FILE_APPEND);
-    }
+    if ($newline) file_put_contents($log_file, $dataWithTimestamp . PHP_EOL . PHP_EOL, FILE_APPEND);
+    else file_put_contents($log_file, $dataWithTimestamp . PHP_EOL, FILE_APPEND);
 
     // * Delete logs older than $timeExpired days
     $logs  = glob($log_dir . '*.log');
     $today = strtotime(date('Y-m-d'));
+    if ($timeExpired < 1) $timeExpired = 1; // * Minimum 1 day (24 hours)
 
     foreach ($logs as $log) {
       if (is_file($log)) {
-        $log_date = date('Y-m-d', strtotime(basename($log, '.log')));
+        $log_date      = date('Y-m-d', strtotime(basename($log, '.log')));
         $log_timestamp = strtotime($log_date);
 
         if ($log_timestamp < $today - ($timeExpired * 24 * 60 * 60)) {
-          $temp_logs = glob($temp_folder . $log_date . '-*.log');
-
-          foreach ($temp_logs as $temp_log) {
-            if (file_exists($temp_log)) unlink($temp_log);
-          }
-
           if (file_exists($log)) unlink($log);
-
-          // * Delete download_logs.phpevery time the log is deleted so that the download_logs.php script can be automatically updated
-          if (file_exists($downloadLogsFile)) unlink($downloadLogsFile);
         }
       }
     }
@@ -391,7 +290,12 @@ if (!function_exists('write_log')) {
   }
 }
 
-// ! Dependent on write_log()
+/**
+ * ! Dependent on : 
+ * * > write_log(), 
+ * * > logs() - inner_helper.php
+ */ 
+
 if (!function_exists('lasq')) {
   function lasq($lasq = '', $message = 0)
   {
@@ -407,11 +311,16 @@ if (!function_exists('lasq')) {
       $prefix = $file . '::' . $prefix . ' - ' . $message;
     }
 
-    write_log($prefix, $lasq, true, false, 'lasq');
+    logs($lasq, $prefix, 3);
+    write_log($prefix, $lasq, true, 'lasq');
   }
 }
 
-// ! Dependent on write_log()
+/**
+ * ! Dependent on : 
+ * * > write_log(), 
+ * * > logs() - inner_helper.php
+ */ 
 if (!function_exists('trace')) {
   function trace($trace = '', $message = 0)
   {
@@ -427,6 +336,7 @@ if (!function_exists('trace')) {
       $prefix = $file . '::' . $prefix . ' - ' . $message;
     }
 
-    write_log($prefix, $trace, true, true, 'trace');
+    logs($trace, $prefix, 2);
+    write_log($prefix, $trace, true, 'trace');
   }
 }

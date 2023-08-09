@@ -49,3 +49,33 @@ if (!function_exists('form_validate'))
     ];
   }
 }
+
+if (!function_exists('logs'))
+{
+  function logs($data = [], $name = '1', $type_id = 1)
+  {
+    $ci = get_instance();
+    $ci->load->library('user_agent');
+
+    if (!$_ENV['DB_WRITE_LOGS']) return false;
+    $max_length = 1000;
+
+    if (is_array($data) || is_object($data)) $data = json_encode($data);
+    if (strlen($data) > $max_length) $data = substr($data, 0, $max_length);
+
+    $send = [
+      'uid'             => uuid(),
+      'name'            => $name,
+      'ip_address'      => $ci->input->ip_address(),
+      'user_agent'      => $ci->input->user_agent(),
+      'platform'        => $ci->agent->platform(),
+      'browser'         => $ci->agent->browser(),
+      'browser_version' => $ci->agent->version(),
+      'type_id'         => $type_id,
+      'description'     => $data
+    ];
+
+    $ci->load->model('logging/M_Logging', 'Logs');
+    $ci->Logs->save_log($send);
+  }
+}
