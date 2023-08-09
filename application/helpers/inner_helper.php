@@ -75,7 +75,6 @@ if (!function_exists('logs'))
       'description'     => $data
     ];
 
-    $ci->load->model('logging/M_Logging', 'Logs');
-    $ci->Logs->save_log($send);
+    return $ci->db->insert('logs', $send);
   }
 }

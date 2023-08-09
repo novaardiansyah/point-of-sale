@@ -8,13 +8,6 @@ class M_Logging extends CI_Model
     parent::__construct();
   }
 
-  public function save_log($param = null)
-  {
-    if ($param == null) return false;
-    $save = $this->db->insert('logs', $param);
-    return $save;
-  }
-
   public function read_log($param = null)
   {
     $param = (object) $param;
