@@ -14,6 +14,9 @@ function signup(event)
 
   handleFormSubmission(conf.base_url('auth/register'), 'POST', form)
     .then(res => {
-      console.log(res)
+      if (res.status == true) {
+        let redirect = res?.data?.redirectTo
+        setTimeout(() => window.location.href = redirect, 4000);
+      }
     })
 }
