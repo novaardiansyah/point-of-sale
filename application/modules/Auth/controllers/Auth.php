@@ -65,6 +65,7 @@ class Auth extends MX_Controller
 
   public function register()
   {
+    $this->load->helper('sendmail');
     $validate = form_validate($this->_register());
 
     if ($validate['status'] == false) return json($validate);
@@ -77,6 +78,25 @@ class Auth extends MX_Controller
     ];
 
     $result = $this->Auth->register($send);
+    trace($result, 1);
+
+    if ($result['status'] == true) {
+      $data = (object) $result['data'];
+      
+      $sendmail = sendcustom_email([
+        'emailTo' => $data->email,
+        'type'    => 'signup_message',
+        'data' => [
+          'uid'      => $data->uid,
+          'fullname' => textCapitalize($data->fullname),
+          'username' => textUppercase($data->username),
+          'email'    => $data->email,
+          'password' => $send['password'] ?? 'very_secret'
+        ]
+      ], true);
+      trace($sendmail, 2);
+    }
+
     json($result);
   }
 

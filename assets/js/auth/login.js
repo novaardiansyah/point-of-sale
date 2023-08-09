@@ -9,8 +9,6 @@ function login(event)
   
   handleFormSubmission(conf.base_url('auth/signin'), 'POST', form)
     .then(res => {
-      console.log(res)
-
       if (res.status == true) {
         let redirect = res?.data?.redirectTo
         setTimeout(() => window.location.href = redirect, 4000);

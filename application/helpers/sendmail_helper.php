@@ -46,6 +46,12 @@ if (!function_exists('sendcustom_email'))
         $ci->email->subject($_ENV['APP_NAME'] . ' - Your Account Has Been Created');
         $ci->email->message($message);
         break;
+      case 'signup_message':
+        $message = $ci->load->view('helper/sendmail/signup_message', $data->data, true);
+
+        $ci->email->subject($_ENV['APP_NAME'] . ' - Your Account Has Been Created');
+        $ci->email->message($message);
+        break;
       default:
         $message = 'Email Delivery Test';
 
