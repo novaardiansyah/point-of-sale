@@ -3,17 +3,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 if (!function_exists('sendcustom_email'))
 {
-  function sendcustom_email($data = [])
+  function sendcustom_email($data = [], $toObject = false)
   {
     $ci = get_instance();
-
-    if (!is_array($data['emailTo'])) {
-      $emailTo = trim(textLowercase($data['emailTo']));
-    } else {
-      $emailTo = $data['emailTo'];
+    
+    if (is_array($data) && $toObject) {
+      $data = (object) $data;
     }
 
-    $type = trim(textLowercase($data['type']));
+    $emailTo = $toObject ? $data->emailTo : $data['emailTo'];
+    $emailTo = trim(textLowercase($emailTo));
+
+    $type = $toObject ? $data->type : $data['type'];
+    $type = trim(textLowercase($type));
 
     $config = [
       'protocol'    => 'smtp',
@@ -38,6 +40,12 @@ if (!function_exists('sendcustom_email'))
      * ! Email content manager (Start)
      */
     switch ($type) {
+      case 'welcome_message':
+        $message = $ci->load->view('helper/sendmail/welcome_message', $data->data, true);
+
+        $ci->email->subject($_ENV['APP_NAME'] . ' - Your Account Has Been Created');
+        $ci->email->message($message);
+        break;
       default:
         $message = 'Email Delivery Test';
 

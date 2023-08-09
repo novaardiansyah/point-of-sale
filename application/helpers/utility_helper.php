@@ -173,13 +173,13 @@ if (!function_exists('get'))
   }
 }
 
-if (!function_exists('hash_pass'))
+if (!function_exists('hash_password'))
 {
-  function hash_pass($string = '')
+  function hash_password($password = '')
   {
-    $string = trim($string);
+    $string = trim($password);
     $string = substr($_ENV['HASHING_KEY'], 0, 18) . $string . substr($_ENV['HASHING_KEY'], -18);
-    return md5(hash('sha256', $string));
+    return hash('sha256', $string);
   }
 }
 
@@ -418,6 +418,6 @@ if (!function_exists('trace')) {
       $prefix = $file . '::' . $prefix . ' - ' . $message;
     }
 
-    write_log($prefix, $trace, true, false, 'trace');
+    write_log($prefix, $trace, true, true, 'trace');
   }
 }

@@ -2,10 +2,12 @@ document.body.insertAdjacentHTML('afterbegin', `<div class="toast-container posi
 
 function showToast(icon = 'success', message = '') 
 {
+  console.log('showToast()')
+
   const container = document.getElementById('toast-container');
   container.innerHTML = '';
 
-  const toast = `<div class="toast align-items-center position-fixed text-white bg-gradient-${icon} p-2 border-0 bottom-5 end-2" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+  const toast = `<div class="toast align-items-center position-fixed text-white bg-gradient-${icon} p-2 border-0 bottom-5 end-2" role="alert" aria-live="assertive" aria-atomic="true" id="toast" style="z-index: 300;">
     <div class="d-flex">
       <div class="toast-body">
         ${message}

@@ -56,6 +56,8 @@ class Auth extends MX_Controller
 
   public function signInWithGoogleAccount()
   {
+    $this->load->helper('sendmail');
+
     $send = [
       'token'          => post('token'),
       'email'          => post('email'),
@@ -69,6 +71,25 @@ class Auth extends MX_Controller
     ];
       
     $result = $this->Auth->signInWithGoogleAccount($send);
+    trace($result, 2);
+
+    if ($result['status'] == true) {
+      $data = (object) $result['data'];
+      if (isset($data->isNewUser) && $data->isNewUser) {
+        $sendmail = sendcustom_email([
+          'emailTo' => $data->email,
+          'type'    => 'welcome_message',
+          'data' => [
+            'uid'      => $data->uid,
+            'fullname' => textCapitalize($data->fullname),
+            'username' => $data->username,
+            'password' => $data->default_password
+          ]
+        ], true);
+        trace($sendmail, 1);
+      }
+    }
+
     json($result);
   }
 }

@@ -34,18 +34,21 @@ class M_Auth extends CI_Model
       // * Login dengan google
       $this->db->update('users', [
         'last_login' => $now,
-        'token'      => $param->token,
+        'token'      => base64_encode($user->uid . '-' . $user->email . '-' . $now),
         'updated_at' => $now,
         'updated_by' => $user->id
       ], ['uid' => $user->uid, 'id' => $user->id]);
       lasq($this->db->last_query(), 2);
 
       $user->redirectTo = base_url();
+      unset($user->id);
+
       return ['status' => true, 'message' => 'Welcome back ' . $param->displayName, 'data' => $user];
     }
     
     // * Register dengan google
     $param->uid = uuid();
+    $param->default_password = textUppercase(substr($param->uid, 0, 6));
 
     $send_data = [
       'uid'               => $param->uid ?? null,
@@ -56,7 +59,8 @@ class M_Auth extends CI_Model
       'profile_image'     => $param->photoURL ?? null,
       'last_login'        => $now,
       'is_verified_email' => 1,
-      'token'             => $param->token ?? null,
+      'password'          => hash_password($param->default_password),
+      'token'             => base64_encode($param->uid . '-' . $param->email . '-' . $now),
       'is_active'         => 1,
       'is_deleted'        => 0
     ];
@@ -72,7 +76,12 @@ class M_Auth extends CI_Model
     ], ['uid' => $user->uid, 'id' => $user->id]);
     lasq($this->db->last_query(), 2);
 
-    $user->redirectTo = base_url();
+    $user->redirectTo       = base_url();
+    $user->isNewUser        = true;
+    $user->default_password = $param->default_password;
+
+    unset($user->id);
+
     return ['status' => true, 'message' => 'Hi ' . $param->displayName . ', thanks for joining us', 'data' => $user];
   }
 }
