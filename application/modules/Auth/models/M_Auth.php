@@ -22,6 +22,39 @@ class M_Auth extends CI_Model
     ];
   }
 
+  public function signin($param = [])
+  {
+    $param = (object) $param;
+    $now   = getTimestamp();
+
+    $email    = strpos($param->username_or_email, '@') !== false ? $param->username_or_email : null;
+    $username = strpos($param->username_or_email, '@') === false ? $param->username_or_email : null;
+    
+    $user = $this->db->query("SELECT a.id, a.uid, a.username, a.email, a.password, a.phone, a.fullname, a.profile_image, a.last_login, a.is_verified_email, a.token, a.is_active, a.is_deleted, a.created_at, a.created_by FROM users AS a WHERE a.email = ? OR a.username = ?", [$email, $username])->row();
+    lasq($this->db->last_query(), 1);
+
+    if (empty($user)) return ['status' => false, 'message' => 'Username/email or password is wrong'];
+
+    if (!verify_password($param->password, $user->password)) return ['status' => false, 'message' => 'Username/email or password is wrong'];
+
+    if ($user->is_active == 0) return ['status' => false, 'message' => 'Your account is not active'];
+    if ($user->is_deleted == 1) return ['status' => false, 'message' => 'Your account is deleted'];
+
+    $this->db->update('users', [
+      'last_login' => $now,
+      'token'      => base64_encode($user->uid . '-' . $user->email . '-' . $now),
+      'updated_at' => $now,
+      'updated_by' => $user->id
+    ], ['uid' => $user->uid, 'id' => $user->id]);
+    lasq($this->db->last_query(), 2);
+
+    unset($user->password);
+    unset($user->id);
+    $user->redirectTo = base_url();
+
+    return ['status' => true, 'message' => 'Welcome back ' . $user->fullname, 'data' => $user];
+  }
+
   public function signInWithGoogleAccount($param = [])
   {
     $param = (object) $param;

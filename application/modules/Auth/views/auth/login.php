@@ -10,20 +10,28 @@
                   <h4 class="font-weight-bolder">Welcome Back!</h4>
                   <p class="mb-0">Enter your email and password to login</p>
                 </div>
-                <div class="card-body pb-3">
-                  <form role="form">
+                <div class="card-body pb-3 pt-2">
+                  <form role="form" novalidate>
                     <div class="mb-3">
-                      <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
+                      <input type="text" class="form-control form-control-lg" id="username_or_email" name="username_or_email" placeholder="Username or Email" value="<?= $_ENV['APP_DEMO_MODE'] ? 'nova-admin' : ''; ?>" required />
+                      <div class="invalid-feedback username_or_email"></div>
                     </div>
+                    <!-- /.mb-3 -->
+
                     <div class="mb-3">
-                      <input type="email" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                      <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password" value="<?= $_ENV['APP_DEMO_MODE'] ? '123456' : ''; ?>" required />
+                      <div class="invalid-feedback password"></div>
                     </div>
+                    <!-- /.mb-3 -->
+
                     <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="rememberMe">
-                      <label class="form-check-label" for="rememberMe">Remember me</label>
+                      <input class="form-check-input" type="checkbox" value="1" id="check_remember_me" name="check_remember_me" checked />
+                      <label class="form-check-label" for="check_remember_me">Remember me</label>
                     </div>
+                    <!-- /.form-check -->
+
                     <div class="text-center">
-                      <button type="button" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Login</button>
+                      <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" onclick="return login(event)">Login</button>
                     </div>
                   </form>
 
