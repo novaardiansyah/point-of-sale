@@ -1,9 +1,6 @@
 <?php 
   $email_must_hide = (int) ((strpos($email, '@') * 70) / 100);
   $email           = str_replace(substr($email, 0, $email_must_hide), str_repeat('*', $email_must_hide), $email);
-
-  $password_length = strlen($password);
-  $password        = str_replace(substr($password, 0, $password_length), str_repeat('*', $password_length), $password);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -172,6 +169,10 @@ END OF IMPORTANT
         padding: 15px;
       }
 
+      .es-p15t {
+        padding-top: 15px;
+      }
+
       .es-p15b {
         padding-bottom: 15px;
       }
@@ -186,10 +187,6 @@ END OF IMPORTANT
 
       .es-p20 {
         padding: 20px;
-      }
-
-      .es-p15t{
-        padding-top: 15px;
       }
 
       .es-p20t {
@@ -902,13 +899,13 @@ END CONFIG STYLES
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td align="center" class="esd-block-text es-m-txt-c es-p20t es-p15b es-p30r es-p30l es-m-p5r es-m-p5l" esd-links-underline="none">
+                                            <td align="center" class="esd-block-text es-m-txt-c es-p30t es-p15b es-p30r es-p30l es-m-p5r es-m-p5l" esd-links-underline="none">
                                               <h1>Thanks for joining us!</h1>
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td align="center" class="esd-block-text es-p20t es-p15b es-p30r es-p30l es-m-p5r es-m-p5l">
-                                              <p style="font-size: 16px;">Hey there, <?= $fullname; ?>! <br />Welcome to the family! You've officially joined us, and that's awesome news. It means you're on the fast track to getting all the juiciest updates and hottest offers straight from us. How cool is that?</p>
+                                            <td align="center" class="esd-block-text es-p20t es-p10b es-p30r es-p30l es-m-p5r es-m-p5l">
+                                              <p style="line-height: 150%; font-size: 16px;">Hey there, <?= $fullname; ?>! <br />Welcome to the family! You've officially joined us, and that's awesome news. It means you're on the fast track to getting all the juiciest updates and hottest offers straight from us. How cool is that? </p>
                                             </td>
                                           </tr>
                                         </tbody>
@@ -994,7 +991,7 @@ END CONFIG STYLES
                                                   <tr>
                                                     <td align="left" class="esd-block-text es-p10b es-p10l">
                                                       <p>
-                                                        <strong><i><?= $password; ?></i></strong>
+                                                        <strong><?= $password; ?></strong>
                                                       </p>
                                                     </td>
                                                   </tr>
@@ -1036,11 +1033,10 @@ END CONFIG STYLES
                                       <table cellpadding="0" cellspacing="0" width="100%" style="border-radius: 5px; border-collapse: separate;">
                                         <tbody>
                                           <tr>
-                                            <td align="center" class="esd-block-text es-p10t es-p10b es-p30r es-p30l es-m-p5r es-m-p5l">
-                                              <p style="font-size: 16px;">As you've likely noticed, your username is currently system-generated  functional, but not the coolest, right? No worries, though! You can rock a username that suits your style and is totally easy to remember. Feel free to switch it up whenever you're ready!</p>
+                                            <td align="center" class="esd-block-text es-p10t es-p20b es-p30r es-p30l es-m-p5r es-m-p5l">
+                                              <p style="line-height: 150%; font-size: 16px;">Chances are you've spotted that your auto-generated username and password are a bit, well, vanilla. But guess what? You're in control! Pick a username and password that's uniquely you, and totally memorable. And the best part? You can switch it up anytime you feel like it, just to keep things fresh and fun!</p>
                                             </td>
                                           </tr>
-
                                           <tr>
                                             <td align="center" class="esd-block-text es-p20t es-p10b es-p30r es-p30l es-m-p5r es-m-p5l">
                                               <p style="line-height: 150%;">Got a burning question or just want to say hi? We're all ears at <a href="mailto:admin@novaardiansyah.site">admin@novaardiansyah.site</a> or you can give us a buzz at <a href="https://wa.me/6289506668480?text=Hi%20Nova%2C%20I%20would%20like%20to%20connect%20with%20you%20soon!">+62 895 0666 8480</a>. We're here to make your experience amazing. </p>
@@ -1048,7 +1044,11 @@ END CONFIG STYLES
                                           </tr>
                                           <tr>
                                             <td align="right" class="esd-block-text es-p25t es-p10b es-p30r es-p30l es-m-p5r es-m-p5l">
-                                              <p style="line-height: 150%;">Kind Regards, <br type="_moz"></p>
+                                              <p style="line-height: 150%;">Kind Regards, <br type="_moz">
+                                              </p>
+                                              <p>
+                                                <br>
+                                              </p>
                                               <p>
                                                 <br>
                                               </p>

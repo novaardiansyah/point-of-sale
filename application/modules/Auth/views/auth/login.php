@@ -13,7 +13,7 @@
                 <div class="card-body pb-3 pt-2">
                   <form role="form" novalidate>
                     <div class="mb-3">
-                      <input type="text" class="form-control form-control-lg" id="username_or_email" name="username_or_email" placeholder="Username or Email" value="<?= $_ENV['APP_DEMO_MODE'] ? 'nova-admin' : ''; ?>" required />
+                      <input type="text" class="form-control form-control-lg" id="username_or_email" name="username_or_email" placeholder="Username or Email" value="<?= $_ENV['APP_DEMO_MODE'] ? 'admin@novaardiansyah.site' : ''; ?>" required />
                       <div class="invalid-feedback username_or_email"></div>
                     </div>
                     <!-- /.mb-3 -->
