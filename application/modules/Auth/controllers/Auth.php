@@ -11,7 +11,45 @@ class Auth extends MX_Controller
 
   public function index()
   {
-    $this->load->view('auth/auth/login');
+    $data = [
+      'script' => [
+        assets_url('js/auth/login.js')
+      ]
+    ];
+
+    $this->load->view('auth/auth/login', $data);
+  }
+
+  public function login()
+  {
+    return redirect(base_url('auth'));
+  }
+
+  public function signin()
+  {
+    $validate = form_validate($this->_signin());
+
+    if ($validate['status'] == false) return json($validate);
+
+    $send = [
+      'username_or_email' => post('username_or_email'),
+      'password'          => post('password')
+    ];
+
+    $result = $this->Auth->signin($send);
+
+    json($result);
+    trace($result, 2);
+  }
+
+  private function _signin()
+  {
+    $rules = [
+			['field' => 'username_or_email', 'label' => 'Username or Email', 'rules' => 'trim|required'],
+      ['field' => 'password', 'label' => 'Password', 'rules' => 'trim|required'],
+		];
+
+    return $rules;
   }
 
   public function signup()

@@ -183,6 +183,15 @@ if (!function_exists('hash_password'))
   }
 }
 
+if (!function_exists('verify_password'))
+{
+  function verify_password($password = '', $hash_password = '')
+  {
+    if (hash_password($password) === $hash_password) return true;
+    return false;
+  }
+}
+
 if (!function_exists('set_session'))
 {
   function set_session($data = [])
