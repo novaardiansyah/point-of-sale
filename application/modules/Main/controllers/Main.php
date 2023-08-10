@@ -5,6 +5,7 @@ class Main extends MX_Controller
 {
   public function index()
   {
+    secure_access();
     view('main/main/dashboard');
   }
 }

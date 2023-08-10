@@ -32,6 +32,7 @@ class M_Logging extends CI_Model
   {
     $param = (object) $param;
     
+    if ($_ENV['APP_ENV'] == 'production') return ['status' => false, 'message' => 'You are not allowed to do this action.', 'error' => 'invalid-environment'];
     if ($this->_validate_token($param->token)['status'] == false) return $this->_validate_token($param->token);
     
     $date = getTimestamp($param->date, 'Y-m-d');
@@ -52,6 +53,7 @@ class M_Logging extends CI_Model
   {
     $param = (object) $param;
 
+    if ($_ENV['APP_ENV'] == 'production') return ['status' => false, 'message' => 'You are not allowed to do this action.', 'error' => 'invalid-environment'];
     if ($this->_validate_token($param->token)['status'] == false) return $this->_validate_token($param->token);
 
     $root = dirname(APPPATH) . '/logs/' . $param->path . '/';

@@ -88,17 +88,20 @@ class M_Auth extends CI_Model
     if ($user->is_active == 0) return ['status' => false, 'message' => 'Your account is not active'];
     if ($user->is_deleted == 1) return ['status' => false, 'message' => 'Your account is deleted'];
 
+    $new_token = base64_encode($user->uid . '-' . $user->email . '-' . $now);
     $this->db->update('users', [
       'last_login' => $now,
-      'token'      => base64_encode($user->uid . '-' . $user->email . '-' . $now),
+      'token'      => $new_token,
       'updated_at' => $now,
       'updated_by' => $user->id
     ], ['uid' => $user->uid, 'id' => $user->id]);
     lasq($this->db->last_query(), 2);
 
-    unset($user->password);
-    unset($user->id);
     $user->redirectTo = base_url();
+    $user->token      = $new_token;
+    $user->last_login = $now;
+
+    unset($user->id, $user->password, $user->is_active, $user->is_deleted, $user->created_at, $user->created_by);
 
     return ['status' => true, 'message' => 'Welcome back ' . $user->fullname, 'data' => $user];
   }

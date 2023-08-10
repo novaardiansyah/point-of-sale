@@ -150,6 +150,9 @@ if (!function_exists('json'))
   function json($data = [])
   {
     $ci = get_instance();
+
+    if (is_object($data)) $data = (array) $data;
+
     $data['csrf'] = csrf_token()->hash;
     return $ci->output->set_content_type('application/json')->set_output(json_encode($data));
   }
@@ -333,7 +336,7 @@ if (!function_exists('trace')) {
     if (!empty($class) && !empty($function)) {
       $prefix = $class . '::' . $function . '() - ' . $message;
     } else {
-      $prefix = $file . '::' . $prefix . ' - ' . $message;
+      $prefix = $file . '::' . $message;
     }
 
     logs($trace, $prefix, 2);
