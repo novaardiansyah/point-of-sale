@@ -36,9 +36,30 @@ class Auth extends MX_Controller
       'password'          => post('password')
     ];
 
-    $result = $this->Auth->signin($send);
+    $result = (object) $this->Auth->signin($send);
+    trace($result, 1);
 
-    trace($result, 2);
+    if ($result->status) {
+      $data = (object) $result->data;
+
+      $session = [
+        'login' => [
+          'uid'               => $data->uid,
+          'username'          => $data->username,
+          'email'             => $data->email,
+          'phone'             => $data->phone,
+          'fullname'          => $data->fullname,
+          'profile_image'     => $data->profile_image,
+          'is_verified_email' => $data->is_verified_email,
+          'last_login'        => $data->last_login,
+          'token'             => $data->token
+        ]
+      ];
+
+      trace($session, 2);
+      set_session($session);
+    }
+
     json($result);
   }
 
@@ -150,5 +171,10 @@ class Auth extends MX_Controller
     }
 
     json($result);
+  }
+
+  public function logout()
+  {
+    return logout();
   }
 }

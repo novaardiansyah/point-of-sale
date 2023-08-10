@@ -78,3 +78,61 @@ if (!function_exists('logs'))
     return $ci->db->insert('logs', $send);
   }
 }
+
+if (!function_exists('auth'))
+{
+  function auth()
+  {
+    $ci = get_instance();
+    
+    $session = (object) get_session('login'); 
+    trace($session, 'auth() - session');
+    if (empty($session)) return ['status' => false, 'message' => 'You are not logged in'];
+
+    $user = $ci->db->query("SELECT a.id, a.uid, a.username, a.email, a.phone, a.fullname, a.profile_image, a.last_login, a.is_verified_email, a.token, a.is_active, a.is_deleted, a.created_at, a.created_by FROM users AS a WHERE a.uid = ? AND a.email = ?", [$session->uid, $session->email])->row();
+    trace($user, 'auth() - user'); lasq($ci->db->last_query(), 1);
+
+    if (empty($user)) {
+      trace($session, 'auth() - empty');
+      return ['status' => false, 'message' => 'Your session is incorrect, please re-login for fix this issue (e01).'];
+    }
+
+    if ($user->is_active == 0) {
+      trace($session, 'auth() - not-active');
+      return ['status' => false, 'message' => 'Your account is not active'];
+    }
+
+    if ($user->is_deleted == 1) {
+      trace($session, 'auth() - deleted');
+      return ['status' => false, 'message' => 'Your account is deleted'];
+    }
+    
+    if ($user->token !== $session->token) {
+      trace($session, 'auth() - invalid-token');
+      return ['status' => false, 'message' => 'Your session is incorrect, please re-login for fix this issue (e02).'];
+    }
+
+    return ['status' => true, 'message' => 'You are securely logged in'];
+  }
+}
+
+if (!function_exists('secure_access'))
+{
+  function secure_access($redirect = 'auth')
+  {
+    $auth = (object) auth();
+    if (!$auth->status) return logout($redirect);
+    return true;
+  } 
+}
+
+if (!function_exists('logout'))
+{
+  function logout($redirect = 'auth')
+  {
+    $ci = get_instance();
+    unset_session(['login']);
+    $ci->session->sess_destroy();
+    return redirect(base_url($redirect));
+  } 
+}
