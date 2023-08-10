@@ -257,11 +257,11 @@ if (!function_exists('write_log')) {
     $root = $root . '/logs/';
     
     if (!is_dir($root)) mkdir($root, 0755, true);
-    file_put_contents($root . '.htaccess', "Deny from all");
+    file_put_contents($root . '.htaccess', "Options -Indexes\nDeny from All");
     
     $log_dir = $root . $path . '/';
     if (!is_dir($log_dir)) mkdir($log_dir, 0755, true);
-    file_put_contents($log_dir . '.htaccess', "Deny from all");
+    file_put_contents($log_dir . '.htaccess', "Options -Indexes\nDeny from All");
     
     $log_file = $log_dir . date('Y-m-d') . '.log';
 
@@ -305,13 +305,13 @@ if (!function_exists('lasq')) {
     $caller_info = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2)[1];
     $class       = isset($caller_info['class']) ? $caller_info['class'] : '';
     $function    = isset($caller_info['function']) ? $caller_info['function'] : '';
-    $file        = basename($caller_info['file']);
+    $file        = basename(isset($caller_info['file']) ? $caller_info['file'] : '');
 
     $prefix = '';
     if (!empty($class) && !empty($function)) {
       $prefix = $class . '::' . $function . '() - ' . $message;
     } else {
-      $prefix = $file . '::' . $prefix . ' - ' . $message;
+      $prefix = $file . '::' . $message;
     }
 
     logs($lasq, $prefix, 3);
@@ -330,7 +330,7 @@ if (!function_exists('trace')) {
     $caller_info = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2)[1];
     $class       = isset($caller_info['class']) ? $caller_info['class'] : '';
     $function    = isset($caller_info['function']) ? $caller_info['function'] : '';
-    $file        = basename($caller_info['file']);
+    $file        = basename(isset($caller_info['file']) ? $caller_info['file'] : '');
 
     $prefix = '';
     if (!empty($class) && !empty($function)) {

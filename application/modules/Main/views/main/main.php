@@ -57,11 +57,19 @@
           <!-- /.search -->
 
           <ul class="navbar-nav justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
-                <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">Nova Ardiansyah</span>
+            <li class="nav-item dropdown pe-2 d-flex align-items-center ms-2">
+              <a href="javascript:void(0);" class="nav-link text-white p-0" id="dropdown-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-fw fa-user me-sm-1"></i>
+                <?= get_session('login')['fullname']; ?>
               </a>
+              <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 pt-2" aria-labelledby="dropdown-profile" style="top: 0 !important">
+                <li class="mt-0">
+                  <a class="dropdown-item border-radius-md" href="<?= base_url('auth/logout'); ?>">
+                    <i class="fa fa-fw fa-sign-out-alt"></i>
+                    Logout
+                  </a>
+                </li>
+              </ul>
             </li>
 
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -74,17 +82,11 @@
               </a>
             </li>
             
-            <li class="nav-item px-3 d-flex align-items-center d-none">
-              <a href="javascript:;" class="nav-link text-white p-0">
-                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
-              </a>
-            </li>
-
             <li class="nav-item dropdown pe-2 d-flex align-items-center ms-2">
               <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-bell cursor-pointer"></i>
               </a>
-              <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+              <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4 pt-2" aria-labelledby="dropdownMenuButton" style="top: 0 !important">
                 <li class="mb-2">
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
