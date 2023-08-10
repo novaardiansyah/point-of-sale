@@ -90,7 +90,8 @@ if (!function_exists('auth'))
     if (empty($session)) return ['status' => false, 'message' => 'You are not logged in'];
 
     $user = $ci->db->query("SELECT a.id, a.uid, a.username, a.email, a.phone, a.fullname, a.profile_image, a.last_login, a.is_verified_email, a.token, a.is_active, a.is_deleted, a.created_at, a.created_by FROM users AS a WHERE a.uid = ? AND a.email = ?", [$session->uid, $session->email])->row();
-    trace($user, 'auth() - user'); lasq($ci->db->last_query(), 1);
+    lasq($ci->db->last_query(), 1);
+    trace($user, 'auth() - user');
 
     if (empty($user)) {
       trace($session, 'auth() - empty');

@@ -100,6 +100,7 @@ class M_Auth extends CI_Model
     $user->redirectTo = base_url();
     $user->token      = $new_token;
     $user->last_login = $now;
+    $user->fullname   = textCapitalize($user->fullname);
 
     unset($user->id, $user->password, $user->is_active, $user->is_deleted, $user->created_at, $user->created_by);
 

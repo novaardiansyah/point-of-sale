@@ -3,9 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_Logging extends CI_Model
 {
+  public $env;
+
   public function __construct()
   {
     parent::__construct();
+    $this->env = $_ENV['APP_ENV'] ?: 'production';
   }
 
   public function read_log($param = null)
@@ -15,7 +18,7 @@ class M_Logging extends CI_Model
     if ($this->_validate_token($param->token)['status'] == false) return $this->_validate_token($param->token);
 
     $date = getTimestamp($param->date, 'Y-m-d');
-    $file = dirname(APPPATH) . '/logs/' . $param->path . '/' . $date . '.log';
+    $file = str_replace('\\', '/', dirname(APPPATH)) . '/logs/' . $param->path . '/' . $date . '.log';
     
     if (!file_exists($file)) {
       $file = dirname(FCPATH) . '/logs/' . $param->path . '/' . $date . '.log';
@@ -32,14 +35,14 @@ class M_Logging extends CI_Model
   {
     $param = (object) $param;
     
-    if ($_ENV['APP_ENV'] == 'production') return ['status' => false, 'message' => 'You are not allowed to do this action.', 'error' => 'invalid-environment'];
+    if ($this->env == 'production') return ['status' => false, 'message' => 'You are not allowed to do this action.', 'error' => 'invalid-environment'];
     if ($this->_validate_token($param->token)['status'] == false) return $this->_validate_token($param->token);
     
     $date = getTimestamp($param->date, 'Y-m-d');
-    $file = dirname(APPPATH) . '/logs/' . $param->path . '/' . $date . '.log';
+    $file = str_replace('\\', '/', dirname(APPPATH)) . '/logs/' . $param->path . '/' . $date . '.log';
     
     if (!file_exists($file)) {
-      $file = dirname(FCPATH) . '/logs/' . $param->path . '/' . $date . '.log';
+      $file = str_replace('\\', '/', dirname(FCPATH)) . '/logs/' . $param->path . '/' . $date . '.log';
       if (!file_exists($file)) return ['status' => false, 'message' => 'Log not found, please try again.', 'error' => 'file-not-found'];
     }
 
@@ -53,15 +56,15 @@ class M_Logging extends CI_Model
   {
     $param = (object) $param;
 
-    if ($_ENV['APP_ENV'] == 'production') return ['status' => false, 'message' => 'You are not allowed to do this action.', 'error' => 'invalid-environment'];
+    if ($this->env == 'production') return ['status' => false, 'message' => 'You are not allowed to do this action.', 'error' => 'invalid-environment'];
     if ($this->_validate_token($param->token)['status'] == false) return $this->_validate_token($param->token);
 
-    $root = dirname(APPPATH) . '/logs/' . $param->path . '/';
-    if ($param->path == 'root') $root = dirname(APPPATH) . '/logs/';
+    $root = str_replace('\\', '/', dirname(APPPATH)) . '/logs/' . $param->path . '/';
+    if ($param->path == 'root') $root = str_replace('\\', '/', dirname(APPPATH)) . '/logs/';
 
     if (!is_dir($root)) {
-      $root = dirname(FCPATH) . '/logs/' . $param->path . '/';
-      if ($param->path == 'root') $root = dirname(FCPATH) . '/logs/';
+      $root = str_replace('\\', '/', dirname(FCPATH)) . '/logs/' . $param->path . '/';
+      if ($param->path == 'root') $root = str_replace('\\', '/', dirname(FCPATH)) . '/logs/';
 
       if (!is_dir($root)) return ['status' => false, 'message' => 'Log not found, please try again.', 'error' => 'file-not-found'];
     }
