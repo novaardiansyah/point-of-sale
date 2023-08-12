@@ -6,11 +6,22 @@ class Main extends MX_Controller
   public function index()
   {
     secure_access();
-    view('main/dashboard');
-  }
 
+    $data = [
+      'breadcrumb' => [
+        'title' => 'Dashboard',
+        'content' => [
+          ['title' => 'Home', 'url' => base_url()],
+          ['title' => 'Dashboard', 'is_active' => true]
+        ]
+      ]
+    ];
+
+    view('main.dashboard', $data);
+  }
+  
   public function error_404()
   {
-    $this->load->view('layout/error/404');
+    view('errors.error-404');
   }
 }

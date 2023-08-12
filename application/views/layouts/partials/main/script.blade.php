@@ -28,3 +28,5 @@
 <script src="<?= adminlte_url('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js'); ?>"></script>
 <!-- AdminLTE App -->
 <script src="<?= adminlte_url('dist/js/adminlte.js'); ?>"></script>
+
+@include('layouts.partials.main.scripts.utility')

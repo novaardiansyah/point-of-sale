@@ -25,13 +25,17 @@ if (!function_exists('adminlte_url'))
   }
 }
 
+use Jenssegers\Blade\Blade;
 if (!function_exists('view'))
 {
+  // ? dependent > jenssegers/blade: ^1.4 > php: >= 7.0
   function view($view, $data = [])
   {
-    $ci = get_instance();
-    $content = $ci->load->view($view, $data, TRUE);
-    $ci->load->view('main/main', ['content' => $content]);
+    $views = VIEWPATH;
+    $cache = APPPATH . 'cache';
+
+    $blade = new Blade($views, $cache);
+    echo $blade->make($view, $data)->render();
   }
 }
 
