@@ -42,10 +42,6 @@ Hey, future Developer! Come join our awesome project. We welcome your ideas, cri
 
 Guess what? This project dances to the beat of the [MIT License](https://github.com/novaardiansyah/point-of-sale/blob/main/LICENSE)! 🎉
 
-## Contact
-
-Feel free to reach out to me via [Email](mailto:admin@novaardiansyah.site) or [Whatsapp](https://wa.me/6289506668480?text=Hi%20Nova,%20I%20have%20a%20question%20about%20Point%20Of%20Sale). I'm just a message away! 📩
-
 ## FAQ
 
 
@@ -74,7 +70,6 @@ Feel free to reach out to me via [Email](mailto:admin@novaardiansyah.site) or [W
 ---
 - Q: How can I become a patron?
 - A: Becoming a patron is simple and straightforward:
-    - Reach out to me via email at admin@novaardiansyah.site
-    - Alternatively, you can contact me on WhatsApp at +62 895 0666 8480 (Indonesia).
+    - Feel free to reach out to me via [Email](mailto:admin@novaardiansyah.site) or [Whatsapp](https://wa.me/6289506668480?text=Hi%20Nova,%20I%20have%20a%20question%20about%20Point%20Of%20Sale). I'm just a message away! 📩
 
     I'm excited to have you join our patron community and access the exclusive benefits that await you!
