@@ -17,13 +17,21 @@ if (!function_exists('argon_url'))
   }
 }
 
+if (!function_exists('adminlte_url'))
+{
+  function adminlte_url($path = '')
+  {
+    return base_url('assets/vendor/adminlte/' . $path);
+  }
+}
+
 if (!function_exists('view'))
 {
   function view($view, $data = [])
   {
     $ci = get_instance();
     $content = $ci->load->view($view, $data, TRUE);
-    $ci->load->view('main/main/main', ['content' => $content]);
+    $ci->load->view('main/main', ['content' => $content]);
   }
 }
 
@@ -135,5 +143,24 @@ if (!function_exists('logout'))
     unset_session(['login']);
     $ci->session->sess_destroy();
     return redirect(base_url($redirect));
+  } 
+}
+
+if (!function_exists('isActiveMenu'))
+{
+  function isActiveMenu($menu = '')
+  {
+    $ci = get_instance();
+
+    $menu_length = count(explode('/', $menu));
+    
+    $segment = '';
+    for ($i = 1; $i <= $menu_length; $i++) {
+      $segment .= $ci->uri->segment($i) . '/';
+    }
+    $segment = rtrim($segment, '/');
+    
+    if ($segment == $menu) return 'active';
+    return '';
   } 
 }
