@@ -48,25 +48,22 @@ Feel free to reach out to me via [Email](mailto:admin@novaardiansyah.site) or [W
 
 ## FAQ
 
-```
-Q: What does "petron" mean?
-A: In the context of this application, a "petron" refers to an individual who has purchased an additional asset for this application. It signifies a special status that grants access to exclusive resources and support.
-```
-```
-Q: Is this application free?
-A: Absolutely, this application is provided to you completely free of charge. By cloning this repository, you can start using the application without any cost.  It's important to note that while the application itself is free, if you choose this option, you'll need to manually create the database with all its columns – a task that can be quite challenging.
-```
-```
-Q: Can I utilize this application for commercial purposes?
-A: Certainly, you have the freedom to employ this application for commercial purposes. It's designed to support your business needs and contribute to your success.
-```
-```
-Q: Can I run this application on my own server whitout buying this additonal asset?
-A: Absolutely, you have the freedom to deploy this application on your personal server. However, it's worth noting that setting up the database appropriately might require a bit more effort, unless you're a petron.
-```
-```
-Q: What is the benefit being a petron?
-A: By becoming a patron, you unlock a range of benefits, including:
+
+- Q: What does "petron" mean?
+- A: In the context of this application, a "petron" refers to an individual who has purchased an additional asset for this application. It signifies a special status that grants access to exclusive resources and support.
+
+---
+- Q: Is this application free?
+- A: Absolutely, this application is provided to you completely free of charge. By cloning this repository, you can start using the application without any cost.  It's important to note that while the application itself is free, if you choose this option, you'll need to manually create the database with all its columns – a task that can be quite challenging.
+---
+- Q: Can I utilize this application for commercial purposes?
+- A: Certainly, you have the freedom to employ this application for commercial purposes. It's designed to support your business needs and contribute to your success.
+---
+- Q: Can I run this application on my own server whitout buying this additonal asset?
+- A: Absolutely, you have the freedom to deploy this application on your personal server. However, it's worth noting that setting up the database appropriately might require a bit more effort, unless you're a petron.
+---
+- Q: What is the benefit being a petron?
+- A: By becoming a patron, you unlock a range of benefits, including:
     - Access to the database file
     - The original environment (env) file
     - The latest version of the application (if there is an update)
@@ -74,12 +71,10 @@ A: By becoming a patron, you unlock a range of benefits, including:
     - And many more...
 
     Your patronage not only empowers you with these valuable resources but also supports the ongoing development and maintenance of this application.
-```
-```
-Q: How can I become a patron?
-A: Becoming a patron is simple and straightforward:
+---
+- Q: How can I become a patron?
+- A: Becoming a patron is simple and straightforward:
     - Reach out to me via email at admin@novaardiansyah.site
     - Alternatively, you can contact me on WhatsApp at +62 895 0666 8480 (Indonesia).
 
     I'm excited to have you join our patron community and access the exclusive benefits that await you!
-```
