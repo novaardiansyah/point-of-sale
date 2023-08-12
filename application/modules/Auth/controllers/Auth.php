@@ -11,6 +11,9 @@ class Auth extends MX_Controller
 
   public function index()
   {
+    $session = (object) get_session('login'); 
+    if (isset($session->uid)) return redirect(base_url());
+
     $data = [
       'script' => [
         assets_url('js/auth/login.js')
@@ -75,6 +78,9 @@ class Auth extends MX_Controller
 
   public function signup()
   {
+    $session = (object) get_session('login'); 
+    if (isset($session->uid)) return redirect(base_url());
+    
     $data = [
       'script' => [
         assets_url('js/auth/signup.js')
