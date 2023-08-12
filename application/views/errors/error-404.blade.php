@@ -30,7 +30,7 @@
       <div class="col-md-6">
         <h1 class="display-1">404</h1>
         <p class="lead mb-0">We apologize, but the page you are looking for is currently unavailable. Our team is diligently working on its development to provide you with a better experience. Thank you for your patience and understanding.</p>
-        <a href="<?= base_url(); ?>" class="btn btn-primary mt-3">Back</a>
+        <a href="{{ base_url(); }}" class="btn btn-primary mt-3">Back</a>
       </div>
     </div>
   </div>
