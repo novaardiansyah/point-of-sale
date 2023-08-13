@@ -5,6 +5,11 @@
     loadingPage(false)
   })
 
+  function testing_utility()
+  {
+    console.log('testing utility')
+  }
+
   function loadingPage(trigger = true, callback = null)
   {
     setTimeout(() => {

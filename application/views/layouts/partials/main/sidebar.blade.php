@@ -239,7 +239,7 @@
       </li>
 
       <li class="nav-item">
-        <a href="javascript:;" class="nav-link {{ isActiveMenu('masterData/barang'); }}">
+        <a href="javascript:;" class="nav-link {{ isActiveMenu('master-data/barang'); }}">
           <i class="nav-icon mdi mdi-table"></i>
           <p>
           Master Data
@@ -248,43 +248,43 @@
         </a>
         <ul class="nav nav-treeview">
           <li class="nav-item">
-            <a href="{{ base_url('masterData/barang'); }}" class="nav-link" {{ isActiveMenu('masterData/barang'); }}>
+            <a href="{{ base_url('master-data/barang'); }}" class="nav-link" {{ isActiveMenu('master-data/barang'); }}>
               <i class="mdi mdi-minus-box-outline"></i>
               <p>Barang</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ base_url('masterData/customer'); }}" class="nav-link" {{ isActiveMenu('masterData/customer'); }}>
+            <a href="{{ base_url('master-data/customer'); }}" class="nav-link" {{ isActiveMenu('master-data/customer'); }}>
               <i class="mdi mdi-minus-box-outline"></i>
               <p>Customer</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ base_url('masterData/gudang'); }}" class="nav-link" {{ isActiveMenu('masterData/gudang'); }}>
+            <a href="{{ base_url('master-data/gudang'); }}" class="nav-link" {{ isActiveMenu('master-data/gudang'); }}>
               <i class="mdi mdi-minus-box-outline"></i>
               <p>Gudang</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ base_url('masterData/kategori'); }}" class="nav-link" {{ isActiveMenu('masterData/kategori'); }}>
+            <a href="{{ base_url('master-data/kategori'); }}" class="nav-link" {{ isActiveMenu('master-data/kategori'); }}>
               <i class="mdi mdi-minus-box-outline"></i>
               <p>Kategori</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ base_url('masterData/satuan'); }}" class="nav-link" {{ isActiveMenu('masterData/satuan'); }}>
+            <a href="{{ base_url('master-data/satuan'); }}" class="nav-link" {{ isActiveMenu('master-data/satuan'); }}>
               <i class="mdi mdi-minus-box-outline"></i>
               <p>Satuan</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ base_url('masterData/supplier'); }}" class="nav-link" {{ isActiveMenu('masterData/supplier'); }}>
+            <a href="{{ base_url('master-data/supplier'); }}" class="nav-link" {{ isActiveMenu('master-data/supplier'); }}>
               <i class="mdi mdi-minus-box-outline"></i>
               <p>Supplier</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ base_url('masterData/sales'); }}" class="nav-link" {{ isActiveMenu('masterData/sales'); }}>
+            <a href="{{ base_url('master-data/sales'); }}" class="nav-link" {{ isActiveMenu('master-data/sales'); }}>
               <i class="mdi mdi-minus-box-outline"></i>
               <p>Sales</p>
             </a>

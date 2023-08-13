@@ -168,3 +168,83 @@ if (!function_exists('isActiveMenu'))
     return '';
   } 
 }
+
+if (!function_exists('dataTable'))
+{
+  function dataTable()
+  {
+    $draw         = get('draw');
+    $start        = get('start');
+    $length       = get('length');
+    $search       = get('search[value]');
+    $order_column = get('order[0][column]');
+    $order_dir    = get('order[0][dir]') ?? 'asc';
+    $orderable    = array_column(get('columns'), 'orderable');
+    $columns      = array_column(get('columns'), 'data');
+    $searchable   = array_column(get('columns'), 'searchable');
+
+    $order_dir = textUppercase($order_dir);
+
+    $search_item = array_filter($columns, function ($key) use ($searchable) {
+      return $searchable[$key] == 'true';
+    }, ARRAY_FILTER_USE_KEY);
+
+    $columns = array_filter($columns, function ($key) use ($orderable) {
+      return $orderable[$key] == 'true';
+    }, ARRAY_FILTER_USE_KEY);
+
+    $sort_by = null;
+    if (!empty($columns[$order_column])) $sort_by = "ORDER BY $columns[$order_column] $order_dir";
+
+    $searchQuery = '';
+    if (!empty($search)) {
+      $searchQuery = "AND (";
+      foreach ($search_item as $key => $value) {
+        $searchQuery .= "$value LIKE '%$search%' OR ";
+      }
+      $searchQuery = substr($searchQuery, 0, -4);
+      $searchQuery .= ")";
+    }
+
+    $send = [
+      'draw'          => $draw,
+      'start'         => $start,
+      'length'        => $length,
+      'searchQuery'   => $searchQuery,
+      'searchKeyword' => $search,
+      'sort_by'       => $sort_by,
+      'order_by'      => isset($columns[$order_column]) ? $columns[$order_column] : null,
+      'order_dir'     => $order_dir,
+    ];
+
+    return $send;
+  } 
+}
+
+if (!function_exists('dataTableResponse'))
+{
+  function dataTableResponse($param = [])
+  {
+    if (empty($param)) return ['status' => false, 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => []];
+    if (is_array($param)) $param = (object) $param;
+    if (is_array($param->request)) $param->request = (object) $param->request;
+
+    $no = $param->request->start;
+    foreach ($param->data as $value) {
+      $value->no = $no + 1;
+      $no++;
+    }
+
+    $response = [
+      'status'          => (int) $param->total > 0 ? true : false,
+      'draw'            => $param->request->draw ?? 0,
+      'start'           => $param->request->start ?? 0,
+      'length'          => $param->request->length ?? 10,
+      'recordsTotal'    => (int) $param->total ?? 0,
+      'recordsFiltered' => count($param->data) ?? 0,
+      'data'            => $param->data
+    ];
+
+    return $response;
+  }
+}
