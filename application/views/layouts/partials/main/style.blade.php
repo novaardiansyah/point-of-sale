@@ -23,3 +23,7 @@
 <link rel="stylesheet" href="<?= adminlte_url('plugins/daterangepicker/daterangepicker.css'); ?>">
 <!-- summernote -->
 <link rel="stylesheet" href="<?= adminlte_url('plugins/summernote/summernote-bs4.min.css'); ?>">
+<!-- Datatables -->
+<link rel="stylesheet" href="<?= adminlte_url('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>" />
+<link rel="stylesheet" href="<?= adminlte_url('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') ?>" />
+<link rel="stylesheet" href="<?= adminlte_url('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') ?>" />
