@@ -7,7 +7,7 @@
         <div class="card">
           <!-- /.card-header -->
           <div class="card-body">
-            <button type="button" class="btn btn-sm btn-primary" onclick="return modalAdd()">
+            <button type="button" class="btn btn-sm btn-primary" onclick="return md_add_kategori(true)">
               <i class="fa fa-fw fa-plus"></i> Add
             </button>
 
@@ -36,4 +36,5 @@
   </div>
 @endsection
 
+@include('layouts.partials.main.dynamic-modal')
 @include('master_data.category.scripts.category')

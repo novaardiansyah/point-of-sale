@@ -40,13 +40,13 @@ class Auth extends MX_Controller
     ];
 
     $result = (object) $this->Auth->signin($send);
-    trace($result, 1);
 
     if ($result->status) {
       $data = (object) $result->data;
 
       $session = [
         'login' => [
+          'id'                => base64_encode($data->id),
           'uid'               => $data->uid,
           'username'          => $data->username,
           'email'             => $data->email,
@@ -59,7 +59,6 @@ class Auth extends MX_Controller
         ]
       ];
 
-      trace($session, 2);
       set_session($session);
     }
 
