@@ -13,7 +13,7 @@ class M_Category extends CI_Model
     if (empty($param)) return ['status' => false, 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => []];
     if (is_array($param)) $param = (object) $param;
 
-    $result = $this->db->query("SELECT a.id, a.uid, a.name, a.parent_id, a.icon, b.name AS parent_name 
+    $result = $this->db->query("SELECT a.uid, a.name, a.parent_id, a.icon, b.name AS parent_name 
     FROM categories AS a 
       LEFT JOIN categories AS b ON a.parent_id = b.id
       WHERE a.is_deleted != 1 $param->searchQuery
@@ -26,5 +26,51 @@ class M_Category extends CI_Model
     lasq($this->db->last_query(), 2);
 
     return dataTableResponse(['total' => $count->total, 'data' => $result, 'request' => $param]);
+  }
+
+  public function dropdown_category($param = [])
+  {
+    if (is_array($param)) $param = (object) $param;
+
+    $searchQuery = isset($param->search) ? "AND (a.name LIKE '%$param->search%')" : '';
+
+    $result = $this->db->query("SELECT a.uid, a.name AS text, a.parent_id, a.icon 
+    FROM categories AS a 
+      WHERE a.is_deleted != 1 $searchQuery
+    ORDER BY a.name ASC LIMIT 10 OFFSET 0")->result();
+    lasq($this->db->last_query(), 1);
+
+    return ['status' => true, 'data' => $result];
+  }
+
+  public function add_category($param = [])
+  {
+    if (is_array($param)) $param = (object) $param;
+    $now = getTimestamp();
+
+    $result = $this->db->query("SELECT a.uid, a.name, a.icon, b.uid AS parent_uid
+    FROM categories AS a 
+      LEFT JOIN categories AS b ON a.parent_id = b.id
+    WHERE a.is_deleted != 1 AND a.name = ? AND b.uid = ?", [$param->name, $param->parent_uid])->row();
+    lasq($this->db->last_query(), 1);
+
+    if ($result) return ['status' => false, 'message' => 'Kategori sudah ada'];
+
+    $category = $this->db->query("SELECT id FROM categories WHERE uid = ?", [$param->parent_uid])->row();
+    lasq($this->db->last_query(), 2);
+
+    $this->db->insert('categories', [
+      'uid'            => uuid(),
+      'name'           => $param->name,
+      'parent_id'      => $category->id ?? 0,
+      'icon'           => $param->is_icon_change == 1 ? $param->icon : null,
+      'is_active'      => 1,
+      'is_deleted'     => 0,
+      'created_at'     => $now,
+      'created_by'     => base64_decode(get_session('login')['id'] ?? false) ?: 0
+    ]);
+    lasq($this->db->last_query(), 3);
+
+    return ['status' => true, 'message' => 'Kategori berhasil ditambahkan'];
   }
 }

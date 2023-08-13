@@ -32,27 +32,47 @@ class Category extends MX_Controller
     json($result);
   }
 
-  public function create()
+  public function dropdown_category()
   {
-    $data['title'] = 'Tambah Kategori';
-    $data['content'] = 'masterData/category/create';
-
-    $this->load->view('layouts/master', $data);
+    $result = $this->Category->dropdown_category($_GET);
+    json($result);
   }
 
-  public function store()
+  public function add_category()
   {
-    $this->form_validation->set_rules('name', 'Nama Kategori', 'required|is_unique[categories.name]');
+    $rules = [
+      ['field' => 'name', 'label' => 'nama kategori', 'rules' => 'trim|required']
+    ];
+    $validate = form_validate($rules);
+    if ($validate['status'] == false) return json($validate);
 
-    if ($this->form_validation->run() == FALSE) {
-      $data['title'] = 'Tambah Kategori';
-      $data['content'] = 'masterData/category/create';
+    $image_path     = 'master_data/category';
+    $icon_name      = $_FILES['icon']['name'] ?? '';
+    $is_icon_change = 0;
 
-      $this->load->view('layouts/master', $data);
-    } else {
-      $this->category_model->store();
-      redirect('master-data/kategori');
+    if ($icon_name != '') {
+      $upload = upload_image('icon', $image_path);
+      if ($upload['status'] == false) return json($upload);
+      else {
+        $icon_name      = $upload['file_name'];
+        $is_icon_change = 1;
+      }
     }
+
+    $send = [
+      'name'           => post('name'),
+      'parent_uid'     => post('parent_uid'),
+      'icon'           => $icon_name,
+      'is_icon_change' => $is_icon_change
+    ];
+    $result = $this->Category->add_category($send);
+
+    if ($result['status'] == false) {
+      remove_image($icon_name, $image_path);
+      return json($result);
+    }
+    
+    return json($result);
   }
 
   public function edit($id)

@@ -102,7 +102,7 @@ class M_Auth extends CI_Model
     $user->last_login = $now;
     $user->fullname   = textCapitalize($user->fullname);
 
-    unset($user->id, $user->password, $user->is_active, $user->is_deleted, $user->created_at, $user->created_by);
+    unset($user->password, $user->is_active, $user->is_deleted, $user->created_at, $user->created_by);
 
     return ['status' => true, 'message' => 'Welcome back ' . $user->fullname, 'data' => $user];
   }
@@ -140,7 +140,6 @@ class M_Auth extends CI_Model
     lasq($this->db->last_query(), 2);
 
     $user->redirectTo = base_url();
-    unset($user->id);
 
     return ['status' => true, 'message' => 'Welcome back ' . $param->displayName, 'data' => $user];
   }

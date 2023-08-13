@@ -246,7 +246,7 @@ if (!function_exists('write_log')) {
     
     $env         = 'front';    // * [front, api]
     $timeExpired = 3;          // * 3 days
-    $maxLogs     = 1000 * 20;  // * Maximum number of log lines stored
+    $maxLogs     = 1000 * 100;  // * Maximum number of log lines stored
 
     if (is_array($data) || is_object($data)) $data = json_encode($data);
 

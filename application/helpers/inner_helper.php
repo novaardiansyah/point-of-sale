@@ -198,6 +198,8 @@ if (!function_exists('dataTable'))
 
     $searchQuery = '';
     if (!empty($search)) {
+      $search = str_replace("'", "", $search);
+
       $searchQuery = "AND (";
       foreach ($search_item as $key => $value) {
         $searchQuery .= "$value LIKE '%$search%' OR ";
@@ -246,5 +248,46 @@ if (!function_exists('dataTableResponse'))
     ];
 
     return $response;
+  }
+}
+
+if (!function_exists('upload_image'))
+{
+  function upload_image($field_name, $upload_path, $allowed_types = 'jpg|jpeg|png', $max_size = 2048)
+  {
+    $ci = get_instance();
+    
+    $path = './assets/img/' . $upload_path . '/';
+    if (!is_dir($path)) mkdir($path, 0777, true);
+
+    $config = [
+      'upload_path'   => $path,
+      'allowed_types' => $allowed_types,
+      'max_size'      => $max_size,
+      'file_name'     => getTimestamp('now', 'YmdHis')
+    ];
+    
+    $ci->load->library('upload', $config);
+    
+    if (!$ci->upload->do_upload($field_name)) {
+      $error = $ci->upload->display_errors();
+      return ['status' => false, 'message' => $error];
+    } else {
+      $data = $ci->upload->data();
+      return ['status' => true, 'file_name' => $data['file_name']];
+    }
+  }
+}
+
+if (!function_exists('remove_image'))
+{
+  function remove_image($image_name, $path)
+  {
+    $path = './assets/img/' . $path . '/';
+    if (!is_dir($path)) return false;
+
+    $image = $path . $image_name;
+    if (file_exists($image)) unlink($image);
+    return true;
   }
 }
