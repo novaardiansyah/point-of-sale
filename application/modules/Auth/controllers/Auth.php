@@ -42,27 +42,32 @@ class Auth extends MX_Controller
     $result = (object) $this->Auth->signin($send);
 
     if ($result->status) {
-      $data = (object) $result->data;
-
-      $session = [
-        'login' => [
-          'id'                => base64_encode($data->id),
-          'uid'               => $data->uid,
-          'username'          => $data->username,
-          'email'             => $data->email,
-          'phone'             => $data->phone,
-          'fullname'          => $data->fullname,
-          'profile_image'     => $data->profile_image,
-          'is_verified_email' => $data->is_verified_email,
-          'last_login'        => $data->last_login,
-          'token'             => $data->token
-        ]
-      ];
-
-      set_session($session);
+      $this->_login_success($result->data);
     }
 
     json($result);
+  }
+
+  private function _login_success($data = [])
+  {
+    if (is_array($data)) $data = (object) $data;
+
+    $session = [
+      'login' => [
+        'id'                => base64_encode($data->id),
+        'uid'               => $data->uid,
+        'username'          => $data->username,
+        'email'             => $data->email,
+        'phone'             => $data->phone,
+        'fullname'          => $data->fullname,
+        'profile_image'     => $data->profile_image,
+        'is_verified_email' => $data->is_verified_email,
+        'last_login'        => $data->last_login,
+        'token'             => $data->token
+      ]
+    ];
+
+    set_session($session);
   }
 
   private function _signin()
@@ -159,6 +164,8 @@ class Auth extends MX_Controller
 
     if ($result['status'] == true) {
       $data = (object) $result['data'];
+      $this->_login_success($data);
+
       if (isset($data->isNewUser) && $data->isNewUser) {
         $sendmail = sendcustom_email([
           'emailTo' => $data->email,
