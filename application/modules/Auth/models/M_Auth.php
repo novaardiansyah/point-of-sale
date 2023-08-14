@@ -70,7 +70,7 @@ class M_Auth extends CI_Model
     return $username;
   }
 
-  public function signin($param = [])
+  public function signin($param = [], $bypass = false)
   {
     $param = (object) $param;
     $now   = getTimestamp();
@@ -83,7 +83,9 @@ class M_Auth extends CI_Model
 
     if (empty($user)) return ['status' => false, 'message' => 'Username/email or password is wrong'];
 
-    if (!verify_password($param->password, $user->password)) return ['status' => false, 'message' => 'Username/email or password is wrong'];
+    if ($bypass == false) {
+      if (!verify_password($param->password, $user->password)) return ['status' => false, 'message' => 'Username/email or password is wrong'];
+    }
 
     if ($user->is_active == 0) return ['status' => false, 'message' => 'Your account is not active'];
     if ($user->is_deleted == 1) return ['status' => false, 'message' => 'Your account is deleted'];
@@ -131,16 +133,7 @@ class M_Auth extends CI_Model
     }
     
     // * Login dengan google
-    $this->db->update('users', [
-      'last_login' => $now,
-      'token'      => base64_encode($user->uid . '-' . $user->email . '-' . $now),
-      'updated_at' => $now,
-      'updated_by' => $user->id
-    ], ['uid' => $user->uid, 'id' => $user->id]);
-    lasq($this->db->last_query(), 2);
-
-    $user->redirectTo = base_url();
-
-    return ['status' => true, 'message' => 'Welcome back ' . $param->displayName, 'data' => $user];
+    $result = $this->signin(['username_or_email' => $user->email], true);
+    return $result;
   }
 }
