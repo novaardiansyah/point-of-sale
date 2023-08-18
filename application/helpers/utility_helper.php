@@ -314,7 +314,7 @@ if (!function_exists('lasq')) {
       $prefix = $file . '::' . $message;
     }
 
-    logs($lasq, $prefix, 3);
+    logs($lasq, $prefix, 3, 'text');
     write_log($prefix, $lasq, true, 'lasq');
   }
 }
@@ -325,7 +325,7 @@ if (!function_exists('lasq')) {
  * * > logs() - inner_helper.php
  */ 
 if (!function_exists('trace')) {
-  function trace($trace = '', $message = 0)
+  function trace($trace = '', $message = 0, $newline = false)
   {
     $caller_info = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2)[1];
     $class       = isset($caller_info['class']) ? $caller_info['class'] : '';
@@ -339,7 +339,7 @@ if (!function_exists('trace')) {
       $prefix = $file . '::' . $message;
     }
 
-    logs($trace, $prefix, 2);
-    write_log($prefix, $trace, true, 'trace');
+    logs($trace, $prefix, 2, 'text');
+    write_log($prefix, $trace, $newline, 'trace');
   }
 }

@@ -67,7 +67,18 @@
     }, after);
   }
 
-  function createSelect2(selector, url, defaultText = null, delay = 250, callback = null) {
+  function createSelect2(selector, url, defaultText = null, defaultValue = null, ignoreValue = [], delay = 250) 
+  {
+    if (defaultText != null) {
+      if (defaultValue != null) {
+        $(selector).append(new Option(defaultText, defaultValue, true, true));
+      } else {
+        $(selector).append(new Option(defaultText, '', true, true));
+      }
+
+      $(selector).trigger('change');
+    }
+
     $(selector).select2({
       theme: 'bootstrap4',
       ajax: {
@@ -80,20 +91,46 @@
           };
         },
         processResults: function(response) {
-          if (defaultText != null) response.data.unshift({ uid: '', text: defaultText });
+          if (defaultText != null && defaultValue == null) response.data.unshift({ uid: '', text: defaultText });
 
-          return {
-            results: response.data.map(function(item) {
-              return {
-                id: item.uid, 
-                text: item.text
-              }
+          let results = response.data.map(function(item) {
+            return {
+              id: item.uid,
+              text: item.text
+            }
+          })
+
+          if (defaultText != null && defaultValue != null) {
+            const isDefaultValueExist = results.some(result => result.id === defaultValue);
+            
+            if (!isDefaultValueExist) {
+              results.unshift({ id: defaultValue, text: defaultText });
+            }
+          }
+
+          if (ignoreValue.length > 0) {
+            ignoreValue.forEach(function(value) {
+              results = results.filter(function(result) {
+                return result.id != value
+              })
             })
           }
+
+          return { results: results };
         }
       }
     })
+  }
 
-    if (typeof callback === 'function') callback();
+  function toast(icon = 'success', message = '', callback = null, timer = 3000)
+  {
+    if (icon == 'success') toastr.success(message)
+    if (icon == 'error') toastr.error(message)
+    if (icon == 'warning') toastr.warning(message)
+    if (icon == 'info') toastr.info(message)
+
+    setTimeout(() => {
+      if (typeof callback === 'function') callback();
+    }, timer);
   }
 </script>

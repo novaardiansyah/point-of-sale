@@ -75,35 +75,53 @@ class Category extends MX_Controller
     return json($result);
   }
 
-  public function edit($id)
+  public function edit_category()
   {
-    $data['title'] = 'Edit Kategori';
-    $data['content'] = 'masterData/category/edit';
-    $data['category'] = $this->category_model->get_by_id($id);
-
-    $this->load->view('layouts/master', $data);
+    $result = $this->Category->edit_category(['uid' => post('uid')]);
+    json($result);
   }
 
-  public function update($id)
+  public function update_category()
   {
-    $this->form_validation->set_rules('name', 'Nama Kategori', 'required|is_unique[categories.name]');
+    $rules = [
+      ['field' => 'name', 'label' => 'nama kategori', 'rules' => 'trim|required']
+    ];
+    $validate = form_validate($rules);
+    if ($validate['status'] == false) return json($validate);
 
-    if ($this->form_validation->run() == FALSE) {
-      $data['title'] = 'Edit Kategori';
-      $data['content'] = 'masterData/category/edit';
-      $data['category'] = $this->category_model->get_by_id($id);
+    $image_path     = 'master_data/category';
+    $icon_name      = $_FILES['icon']['name'] ?? '';
+    $is_icon_change = 0;
 
-      $this->load->view('layouts/master', $data);
-    } else {
-      $this->category_model->update($id);
-      redirect('master-data/kategori');
+    if ($icon_name != '') {
+      $upload = upload_image('icon', $image_path);
+      if ($upload['status'] == false) return json($upload);
+      else {
+        $icon_name      = $upload['file_name'];
+        $is_icon_change = 1;
+      }
     }
-  }
 
-  public function delete($id)
-  {
-    $this->category_model->delete($id);
-    redirect('master-data/kategori');
-  }
+    $send = [
+      'uid'            => post('uid'),
+      'name'           => post('name'),
+      'parent_uid'     => post('parent_uid'),
+      'icon'           => $icon_name,
+      'is_icon_change' => $is_icon_change
+    ];
+    
+    $result = $this->Category->update_category($send);
 
+    if ($result['status'] == false) {
+      remove_image($icon_name, $image_path);
+      return json($result);
+    }
+
+    if ($is_icon_change == 1) {
+      $old_icon = $result['data']->icon;
+      remove_image($old_icon, $image_path);
+    }
+    
+    return json($result);
+  }
 }

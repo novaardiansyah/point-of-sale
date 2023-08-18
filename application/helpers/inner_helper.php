@@ -64,28 +64,44 @@ if (!function_exists('form_validate'))
 
 if (!function_exists('logs'))
 {
-  function logs($data = [], $name = '1', $type_id = 1)
+  function logs($data = [], $name = '1', $type_id = 1, $type_of_log = 'normal')
   {
     $ci = get_instance();
     $ci->load->library('user_agent');
 
-    if (!$_ENV['DB_WRITE_LOGS']) return false;
+    if ($type_of_log == 'text') {
+      if (!$_ENV['DB_WRITE_LOGS']) return false;
+    }
+
     $max_length = 1000;
 
     if (is_array($data) || is_object($data)) $data = json_encode($data);
     if (strlen($data) > $max_length) $data = substr($data, 0, $max_length);
 
     $send = [
-      'uid'             => uuid(),
-      'name'            => $name,
-      'ip_address'      => $ci->input->ip_address(),
-      'user_agent'      => $ci->input->user_agent(),
-      'platform'        => $ci->agent->platform(),
-      'browser'         => $ci->agent->browser(),
-      'browser_version' => $ci->agent->version(),
-      'type_id'         => $type_id,
-      'description'     => $data
+      'uid'         => uuid(),
+      'name'        => $name,
+      'ip_address'  => $ci->input->ip_address(),
+      'user_agent'  => $ci->input->user_agent(),
+      'platform'    => $ci->agent->platform(),
+      'browser'     => $ci->agent->browser(),
+      'version'     => $ci->agent->version(),
+      'referrer'    => null,
+      'type_id'     => $type_id,
+      'description' => $data
     ];
+
+    if ($type_id == 4) {
+      $data        = json_decode($data);
+      $visited_key = 'visitor-log-' . $data->referrer;
+
+      if ($ci->session->userdata($visited_key)) return FALSE;
+      $ci->session->set_userdata($visited_key, true, 30 * 60); // * 30 minutes
+
+      $send['name']        = 'visitor-log';
+      $send['description'] = 'User visit from ' . $send['platform'] . ' using ' . $send['browser'] . ' ' . $send['version'];
+      $send['referrer']    = $data->referrer;
+    }
 
     return $ci->db->insert('logs', $send);
   }

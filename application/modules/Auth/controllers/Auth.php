@@ -11,6 +11,8 @@ class Auth extends MX_Controller
 
   public function index()
   {
+    logs(['referrer' => base_url('auth')], null, 4);
+
     $session = (object) get_session('login'); 
     if (isset($session->uid)) return redirect(base_url());
 
@@ -82,6 +84,8 @@ class Auth extends MX_Controller
 
   public function signup()
   {
+    logs(['referrer' => base_url('auth/signup')], null, 4);
+
     $session = (object) get_session('login'); 
     if (isset($session->uid)) return redirect(base_url());
     
