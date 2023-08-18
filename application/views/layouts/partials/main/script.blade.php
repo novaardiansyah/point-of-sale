@@ -31,6 +31,8 @@
 <script src="<?= adminlte_url('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') ?>"></script>
 <!-- Select2 -->
 <script src="<?= adminlte_url('plugins/select2/js/select2.full.min.js') ?>"></script>
+<!-- Toastr -->
+<script src="<?= adminlte_url('plugins/toastr/toastr.min.js') ?>"></script>
 <!-- overlayScrollbars -->
 <script src="<?= adminlte_url('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js'); ?>"></script>
 <!-- AdminLTE App -->

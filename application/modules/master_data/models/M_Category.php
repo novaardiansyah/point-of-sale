@@ -73,4 +73,58 @@ class M_Category extends CI_Model
 
     return ['status' => true, 'message' => 'Kategori berhasil ditambahkan'];
   }
+
+  public function edit_category($param = [])
+  {
+    if (is_array($param)) $param = (object) $param;
+    $now = getTimestamp();
+    $uid = $param->uid ?? null;
+
+    if ($uid == null) return ['status' => false, 'message' => 'Kategori tidak ditemukan'];
+
+    $result = $this->db->query("SELECT a.uid, a.name, a.icon, b.uid AS parent_uid, b.name AS parent_name
+    FROM categories AS a 
+      LEFT JOIN categories AS b ON a.parent_id = b.id
+    WHERE a.is_deleted != 1 AND a.uid = ?", [$uid])->row();
+    lasq($this->db->last_query(), 1);
+
+    if (!$result) return ['status' => false, 'message' => 'Kategori tidak ditemukan'];
+
+    return ['status' => true, 'message' => 'Kategori Tersedia', 'data' => $result];
+  }
+
+  public function update_category($param = [])
+  {
+    if (is_array($param)) $param = (object) $param;
+    
+    $now = getTimestamp();
+    
+    $uid            = $param->uid ?? 0;
+    $parent_uid     = $param->parent_uid;
+    $name           = $param->name;
+    $is_icon_change = $param->is_icon_change;
+    $icon           = $param->icon;
+
+    $result = $this->db->query("SELECT a.uid, a.name, a.icon, b.uid AS parent_uid
+    FROM categories AS a 
+      LEFT JOIN categories AS b ON a.parent_id = b.id
+    WHERE a.is_deleted != 1 AND a.uid = ?", [$uid])->row();
+    lasq($this->db->last_query(), 1);
+
+    if (empty($result)) return ['status' => false, 'message' => 'Kategori tidak tersedia!'];
+
+    $category = $this->db->query("SELECT id FROM categories WHERE uid = ?", [$parent_uid])->row();
+    lasq($this->db->last_query(), 2);
+
+    $this->db->update('categories', [
+      'name'       => $name,
+      'parent_id'  => $category->id ?? 0,
+      'icon'       => $is_icon_change == 1 ? $icon : null,
+      'updated_at' => $now,
+      'updated_by' => base64_decode(get_session('login')['id'] ?? false) ?: 0
+    ], ['uid' => $uid]);
+    lasq($this->db->last_query(), 3);
+
+    return ['status' => true, 'message' => 'Kategori berhasil diperbarui!', 'data' => $result];
+  }
 }

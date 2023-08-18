@@ -6,6 +6,7 @@ class Main extends MX_Controller
   public function index()
   {
     secure_access();
+    logs(['referrer' => base_url('auth/main')], null, 4);
 
     $data = [
       'breadcrumb' => [
